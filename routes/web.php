@@ -1,8 +1,10 @@
 <?php
 
 use App\Models\User;
+use App\Models\SySection;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SySectionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,21 @@ Route::get('/get-attendance-admin', function(){
     return response()->json($att_admin);
 });
 
+Route::get('/get-student', function(){
+    $students = User::where('role', 'Student')->get();
+    return response()->json($students);
+});
+Route::get('/get-parent', function(){
+    $parent = User::where('role', 'Parent')->get();
+    return response()->json($parent);
+});
+
+Route::get('/get-sections', function(){
+    $sections = SySection::all();
+    return response()->json($sections);
+
+});
+
 Route::get('/', function () {
     return view('login');
 });
@@ -33,7 +50,13 @@ Route::get('/create-account-page', function(){
 Route::post('/create-account', [UserController::class, 'create_account']);
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/logout', [UserController::class, 'logout']);
-Route::post('/add-attendance-admin', [UserController::class, 'add_attendance_admin']);
+Route::post('/add-user', [UserController::class, 'add_user']);
+Route::post('/edit-user', [UserController::class, 'edit_user']);
+Route::post('/delete-user', [UserController::class, 'delete_user']);
+
+Route::post('/add-section', [SySectionController::class, 'add_section']);
+Route::post('/edit-section', [SySectionController::class, 'edit_section']);
+Route::post('/delete-section', [SySectionController::class, 'delete_section']);
 
 //Routings
 Route::get('/student-dashboard', function(){
@@ -92,6 +115,25 @@ Route::get('/super-admin-students', function(){
     }
 });
 
+Route::get('/super-admin-parents', function(){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        return view('SuperAdmin.parents');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/super-admin-parents/view-parent/{parent_id}', function($parent_id){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+
+        $parent = User::find($parent_id);
+
+        return view('SuperAdmin.view_parent', ['parent' => $parent]);
+    }else{
+        return redirect('/');
+    }
+});
+
 Route::get('/super-admin-sy-sections', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){
         return view('SuperAdmin.sy_sections');
@@ -99,6 +141,17 @@ Route::get('/super-admin-sy-sections', function(){
         return redirect('/');
     }
 });
+
+Route::get('/super-admin-sy-sections/section_member/{section_id}', function($section_id){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+
+        $section = SySection::find($section_id);
+        return view('SuperAdmin.section_details', ['section' => $section]);
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/super-admin-events', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){

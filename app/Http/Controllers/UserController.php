@@ -70,27 +70,47 @@ class UserController extends Controller
         return redirect('/');
     }
 
-    public function add_attendance_admin(Request $request){
-        if ($request->password == $request->c_password){
+    public function add_user(Request $request){
 
-            $latest_no = User::latest('id')->first();
+        $latest_no = User::latest('id')->first();
 
-            $user = User::create([
-                'complete_name' => $request->complete_name,
-                'sex' => $request->sex,
-                'bday' => $request->bday,
-                'address' => $request->address,
-                'phone' => $request->phone,
-                'parent_name' => 'N/A',
-                'parent_contact' => 'N/A',
-                'role' => $request->role,
-                'status' => "Active",
-                'username' => $request->username,
-                'system_no' => date("Ymd") . $latest_no->id,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-            ]);
-            return response()->json();
-        }
+        $user = User::create([
+            'complete_name' => $request->complete_name,
+            'sex' => $request->sex,
+            'bday' => $request->bday,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'parent_name' => $request->parent_name,
+            'parent_contact' => $request->parent_contact,
+            'role' => $request->role,
+            'status' => "Active",
+            'username' => $request->username,
+            'system_no' => date("Ymd") . $latest_no->id,
+            'email' => $request->email,
+            'password' => bcrypt("12345678"),
+        ]);
+        return response()->json();
+    }
+
+    public function edit_user(Request $request){
+        $users = User::find($request->user_id);
+        $users->complete_name = $request->complete_name;
+        $users->sex = $request->sex;
+        $users->bday = $request->bday;
+        $users->address = $request->address;
+        $users->phone = $request->phone;
+        $users->status = $request->status;
+        $users->username = $request->username;
+        $users->email = $request->email;
+        $users->save();
+        return response()->json();
+
+    }
+
+    public function delete_user(Request $request){
+        $users = User::find($request->user_id);
+        $users->delete();
+        return response()->json();
+
     }
 }

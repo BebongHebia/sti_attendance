@@ -36,7 +36,7 @@
                     <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image">
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                    <h4 class="text-start">Login - Pushing</h4>
+                    <h4 class="text-start">Login</h4>
                     <form action="{{ url('/login') }}" method="POST">
                         @csrf
                         <!-- Email input -->

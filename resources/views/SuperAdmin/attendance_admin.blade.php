@@ -60,13 +60,11 @@
                                     <input type="email" name="email" class="form-control" placeholder="Enter Email">
 
                                     <label>Username</label>
-                                    <input type="text" name="username" class="form-control" placeholder="Enter Email">
+                                    <input type="text" name="username" class="form-control" placeholder="Enter Username">
 
-                                    <label>Password</label>
-                                    <input type="password" name="password" class="form-control" placeholder="Enter Password">
 
-                                    <label>Confirm Password</label>
-                                    <input type="password" name="c_password" class="form-control" placeholder="Confirm Password">
+                                    <input type="hidden" name="parent_name" value="N/A" class="form-control">
+                                    <input type="hidden" name="parent_contact" value="N/A" class="form-control">
 
 
                                 </form>
@@ -93,7 +91,7 @@
                     </div>
                     <div class="card-body">
                         <table class="table tabe-hover table-striped table-bordered" id="data_table">
-                            <thead>
+                            <thead class="table-dark">
                                 <th>Complete Name</th>
                                 <th>Sex</th>
                                 <th>Date of birth</th>
@@ -141,6 +139,42 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
 
+                                    <button class="btn btn-danger" data-toggle="modal" data-target="#delete_attendance_admin_modal${att_admin.id}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+
+                                    <div class="modal fade" id="delete_attendance_admin_modal${att_admin.id}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h4 class="modal-title">Delete Attendance Admin</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form id="delete_attendance_admin_form${att_admin.id}">
+                                                    @csrf
+                                                    <input type="hidden" name="role" value="Admin">
+                                                    <input type="hidden" name="user_id" value="${att_admin.id}">
+
+                                                    <h5 class="text-center">Confirming Delete Attendance Admin</h5>
+
+
+                                                </form>
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" onclick="delete_attendance_admin(event, ${att_admin.id})" class="btn btn-danger">Delete</button>
+                                                </div>
+                                            </div>
+                                        <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
+
+
                                     <div class="modal fade" id="edit_attendance_admin_modal${att_admin.id}">
                                         <div class="modal-dialog">
                                             <div class="modal-content">
@@ -151,10 +185,10 @@
                                                 </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                <form id="add_attendance_admin_form">
+                                                <form id="edit_attendance_admin_form${att_admin.id}">
                                                     @csrf
                                                     <input type="hidden" name="role" value="Admin">
-                                                    <input type="hidden" name="att_admin_id" value="${att_admin.id}">
+                                                    <input type="hidden" name="user_id" value="${att_admin.id}">
 
                                                     <label>Complete Name</label>
                                                     <input type="text" name="complete_name" value="${att_admin.complete_name}" class="form-control" placeholder="Enter Complete name">
@@ -181,12 +215,19 @@
                                                     <label>Username</label>
                                                     <input type="text" value="${att_admin.username}" name="username" class="form-control" placeholder="Enter Email">
 
+                                                    <label>Status</label>
+                                                    <select class="form-select select2" name="status">
+                                                        <option value="${att_admin.status}" selected>${att_admin.status} Selected</option>
+                                                        <option value="Active">Active</option>
+                                                        <option value="Inactive">Inactive</option>
+                                                    </select>
+
 
                                                 </form>
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                                    <button type="button" onclick="add_attendance_admin(event)" class="btn btn-primary">Save changes</button>
+                                                    <button type="button" onclick="edit_attendance_admin(event, ${att_admin.id})" class="btn btn-primary">Save changes</button>
                                                 </div>
                                             </div>
                                         <!-- /.modal-content -->
@@ -196,16 +237,60 @@
                                     <!-- /.modal -->
 
 
-                                    <button class="btn btn-danger">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
+
+
+
                                 </td>
                             </tr>
 
                         `;
                 });
 
-                $('#att_admin_table_body').html(rows)
+                $('#att_admin_table_body').html(rows);
+                $('.select2').select2();
+            }
+        });
+    }
+
+
+    function delete_attendance_admin(event, att_admin_id){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: `{{ url('/delete-user') }}`,
+            data: $('#delete_attendance_admin_form' + att_admin_id).serialize(),
+            success: function (data) {
+                $('#delete_attendance_admin_form' + att_admin_id)[0].reset();
+                $('#delete_attendance_admin_modal' + att_admin_id).modal('hide');
+                display_attendance_admin();
+
+                Swal.fire({
+                    title: 'Deleted'
+                    , text: 'Attendance Admin Deleted successfully'
+                    , icon: 'warning',
+                 });
+            }
+        });
+    }
+
+    function edit_attendance_admin(event, att_admin_id){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: `{{ url('/edit-user') }}`,
+            data: $('#edit_attendance_admin_form' + att_admin_id).serialize(),
+            success: function (data) {
+                $('#edit_attendance_admin_form' + att_admin_id)[0].reset();
+                $('#edit_attendance_admin_modal' + att_admin_id).modal('hide');
+                display_attendance_admin();
+
+                Swal.fire({
+                    title: 'Edited'
+                    , text: 'Attendance Admin Edited successfully'
+                    , icon: 'success',
+                 });
             }
         });
     }
@@ -215,7 +300,7 @@
 
         $.ajax({
             type: "POST"
-            , url: `{{ url('/add-attendance-admin') }}`
+            , url: `{{ url('/add-user') }}`
             , data: $('#add_attendance_admin_form').serialize()
             , success: function(data) {
                 $('#add_attendance_admin_form')[0].reset();
@@ -224,8 +309,8 @@
                 Swal.fire({
                     title: 'Added'
                     , text: 'Attendance Admin added successfully'
-                    , icon: 'success'
-                , });
+                    , icon: 'success',
+                 });
 
             }
         });
