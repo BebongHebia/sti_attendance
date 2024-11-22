@@ -45,7 +45,7 @@
                                             <input type="text" name="complete_name" class="form-control" placeholder="Enter Complete name">
 
                                             <label>Sex</label>
-                                            <select class="form-select select2" name="sex">
+                                            <select class="form-select select2" name="sex" style="width:100%">
                                                 <option value="Male">Male</option>
                                                 <option value="Female">Female</option>
                                             </select>
@@ -68,8 +68,6 @@
                                             <label>Email</label>
                                             <input type="email" name="email" class="form-control" placeholder="Enter Email">
 
-                                            <label>Username</label>
-                                            <input type="text" name="username" class="form-control" placeholder="Enter Username">
 
 
                                         </form>
@@ -232,9 +230,6 @@
 
                                                     <label>Parent Contact</label>
                                                     <input type="text" value="${students.parent_contact}" name="parent_contact"  class="form-control" placeholder="Enter Email">
-
-                                                    <label>Username</label>
-                                                    <input type="text" value="${students.username}" name="username" class="form-control" placeholder="Enter Email">
 
                                                     <label>Status</label>
                                                     <select class="form-select select2" name="status">

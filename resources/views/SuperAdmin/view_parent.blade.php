@@ -74,24 +74,68 @@
                         <div class="tab-content">
                             <div class="active tab-pane" id="activity">
 
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#add_parent_student_modal">
+                                            <i class="fas fa-plus"></i> Add Student
+                                        </button>
 
-                                <div class="card card-primary">
-                                    <div class="card-header">
-                                        <h3 class="card-title">General</h3>
+                                        <div class="modal fade" id="add_parent_student_modal">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h4 class="modal-title">Add Parent Sudent</h4>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form id="add_parent_student_form">
+                                                            @csrf
 
-                                        <div class="card-tools">
-                                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                                <i class="fas fa-minus"></i>
-                                            </button>
+                                                            <label>Select Section</label>
+                                                            <select class="form-select select2" name="sy_section" id="school_year_section" onchange="get_section_member(event)">
+                                                                @php
+                                                                    $get_sy_section = App\Models\SySection::where('status', 'Active')->get();
+                                                                @endphp
+
+                                                                @foreach ($get_sy_section as $item_get_sy_section)
+                                                                    <option value="{{ $item_get_sy_section->id }}">{{ $item_get_sy_section->section_name }} | <span style="color:orange"><b>{{ $item_get_sy_section->grade_lvl }}</b></span> | {{ $item_get_sy_section->school_year }}</option>
+                                                                @endforeach
+                                                            </select>
+
+                                                            <input type="hidden" name="parent_id" value="{{$parent->id}}">
+                                                            <label>Select Student</label>
+                                                            <select class="form-select select2" name="student_id" id="student_id">
+                                                            </select>
+                                                        </form>
+                                                    </div>
+                                                    <div class="modal-footer justify-content-between">
+                                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                        <button type="button" onclick="add_parent_student(event)" class="btn btn-primary">Add Student</button>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-content -->
+                                            </div>
+                                            <!-- /.modal-dialog -->
+                                        </div>
+                                        <!-- /.modal -->
+
+
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div id="parent_student_container">
+
                                         </div>
                                     </div>
-                                    <div class="card-body">
-
-
-                                    </div>
-                                    <!-- /.card-body -->
                                 </div>
-                                <!-- /.card -->
+
+
+
 
 
                             </div>
@@ -111,4 +155,91 @@
     <!--/. container-fluid -->
 </section>
 <!-- /.content -->
+
+<script>
+    display_parent_student();
+    function display_parent_student(){
+        var parent_id = {{ $parent->id }};
+
+        $.ajax({
+            type: "GET",
+            url: `{{ url('/get-parent-student/parent-id=${parent_id}') }}`,
+            success: function (data) {
+                let rows = '';
+
+                $.each(data, function (index, parent_students) {
+                    rows += `
+                        <div class="card card-primary mt-2">
+                            <div class="card-header">
+                                <h3 class="card-title">
+                                    <span style="color:orange; font-weight:bold">${parent_students.get_sy_section ? parent_students.get_sy_section.section_name : 'N/A'}</span> |
+                                    <span style="color:orange; font-weight:bold">${parent_students.get_sy_section ? parent_students.get_sy_section.grade_lvl : 'N/A'}</span> |
+                                    <span style="color:orange; font-weight:bold">${parent_students.get_sy_section ? parent_students.get_sy_section.school_year : 'N/A'}</span> |
+                                    <span style="color:white; font-weight:bold">${parent_students.get_student ? parent_students.get_student.complete_name : 'N/A'}</span>
+                                </h3>
+
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        <!-- /.card -->
+                    `;
+                });
+
+                $('#parent_student_container').html(rows);
+            }
+        });
+    }
+
+    function add_parent_student(event) {
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST"
+            , url: `{{ url('/add-student-parent') }}`
+            , data: $('#add_parent_student_form').serialize()
+            , success: function(data) {
+                $('#add_parent_student_form')[0].reset();
+                display_parent_student();
+                Swal.fire({
+                    title:  'Added',
+                    text:  'Parent Student Added Successfuly',
+                    icon:  'success',
+                });
+            }
+        });
+    }
+
+    function get_section_member(event) {
+
+        var section_id = $('#school_year_section').val();
+        event.preventDefault();
+
+        $.ajax({
+            type: "GET"
+            , url: `{{ url('/fetch-section-member/section-id=${section_id}') }}`
+            , success: function(data) {
+                let rows = '';
+
+                $.each(data, function(index, section_member) {
+                    rows += `
+                        <option value="${section_member.id}">${section_member.get_student ? section_member.get_student.complete_name : 'N/A'}</option>
+
+                    `;
+                });
+
+                $('#student_id').html(rows);
+            }
+        });
+
+    }
+
+</script>
 @endsection

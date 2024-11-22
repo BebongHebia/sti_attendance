@@ -69,9 +69,6 @@
                                                     <label>Email</label>
                                                     <input type="email" name="email" class="form-control" placeholder="Enter Email">
 
-                                                    <label>Username</label>
-                                                    <input type="text" name="username" class="form-control" placeholder="Enter Username">
-
 
                                                 </form>
                                             </div>
@@ -233,9 +230,6 @@
 
                                                     <label>Email</label>
                                                     <input type="email" value="${parent.email}" name="email"  class="form-control" placeholder="Enter Email">
-
-                                                    <label>Username</label>
-                                                    <input type="text" value="${parent.username}" name="username" class="form-control" placeholder="Enter Email">
 
                                                     <label>Status</label>
                                                     <select class="form-select select2" name="status">

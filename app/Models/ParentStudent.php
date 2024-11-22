@@ -14,8 +14,19 @@ class ParentStudent extends Model
         'sy_section',
         'parent_id',
         'student_id',
-        'section_id',
 
     ];
+
+    public function get_sy_section(){
+        return $this->belongsTo(SySection::class, 'sy_section');
+    }
+
+    public function get_parent(){
+        return $this->belongsTo(User::class, 'parent_id');
+    }
+
+    public function get_student(){
+        return $this->belongsTo(User::class, 'student_id');
+    }
 
 }

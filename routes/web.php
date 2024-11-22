@@ -1,10 +1,21 @@
 <?php
 
 use App\Models\User;
+use App\Models\Event;
 use App\Models\SySection;
+use App\Models\Attendance;
+use App\Models\ParentStudent;
+use App\Models\AttendanceDetail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Models\SchoolYearSectionDetails;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\SySectionController;
+use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\ParentStudentController;
+use App\Http\Controllers\AttendanceDetailController;
+use App\Http\Controllers\SchoolYearSectionDetailsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,9 +49,48 @@ Route::get('/get-sections', function(){
 
 });
 
+Route::get('/fetch-section-details/sys={sys_id}', function($sys_id){
+    $section_member = SchoolYearSectionDetails::where('sys_id', $sys_id)->with(['get_student'])->get();
+    return response()->json($section_member);
+});
+
+Route::get('/fetch-section-member/section-id={sec_id}', function($sec_id){
+    $section_member = SchoolYearSectionDetails::where('sys_id', $sec_id)->with(['get_student'])->get();
+    return response()->json($section_member);
+});
+
+Route::get('/get-parent-student/parent-id={parent_id}', function($parent_id){
+    $parent_student = ParentStudent::where('parent_id', $parent_id)->with(['get_sy_section', 'get_student'])->get();
+    return response()->json($parent_student);
+});
+
+Route::get('/fetch-events', function(){
+    $events = Event::all();
+    return response()->json($events);
+});
+
+Route::get('/get-selected-event/event-id={event_id}', function($event_id){
+    $event = Event::find($event_id);
+    return response()->json($event);
+
+});
+
+Route::get('/fetch-attendance-sheet', function(){
+    $attendance = Attendance::with(['get_event'])->get();
+
+    return response()->json($attendance);
+});
+
+Route::get('/fetch-attendance-details/att-d-id={att_id}', function($att_id){
+    $attendance_details = AttendanceDetail::where('attendance_id', $att_id)->with(['get_section_details.get_student', 'get_attendance.get_event'])->get();
+    return response()->json($attendance_details);
+});
+
 Route::get('/', function () {
     return view('login');
 });
+
+
 
 
 Route::get('/create-account-page', function(){
@@ -57,6 +107,21 @@ Route::post('/delete-user', [UserController::class, 'delete_user']);
 Route::post('/add-section', [SySectionController::class, 'add_section']);
 Route::post('/edit-section', [SySectionController::class, 'edit_section']);
 Route::post('/delete-section', [SySectionController::class, 'delete_section']);
+
+Route::post('/add-student-sysd', [SchoolYearSectionDetailsController::class, 'add_sys_details']);
+Route::post('/remove-sys-details', [SchoolYearSectionDetailsController::class, 'remove_sys_details']);
+
+Route::post('/add-student-parent', [ParentStudentController::class, 'add_parent_student']);
+
+Route::post('/add-event', [EventController::class, 'add_event']);
+Route::post('/edit-event', [EventController::class, 'edit_event']);
+Route::post('/delete-event', [EventController::class, 'delete_event']);
+
+Route::post('/add-attendance', [AttendanceController::class, 'add_attendance']);
+Route::post('/edit_attendance', [AttendanceController::class, 'edit_attendance']);
+Route::post('/delete-attendance', [AttendanceController::class, 'delete_attendance']);
+
+Route::post('/delete-attendance-details', [AttendanceDetailController::class, 'delete_att_de']);
 
 //Routings
 Route::get('/student-dashboard', function(){
@@ -168,6 +233,21 @@ Route::get('/super-admin-attendace', function(){
         return redirect('/');
     }
 });
+
+Route::get('/super-admin-attendace/attendance-id={att_id}', function($att_id){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+
+        $attendance_details = Attendance::find($att_id);
+
+        $attendance = AttendanceDetail::where('attendance_id', $att_id)->get();
+
+        return view('SuperAdmin.attendance_details', ['attendance' => $attendance, 'attendance_details' => $attendance_details]);
+
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/super-admin-reports', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){

@@ -59,10 +59,6 @@
                                     <label>Email</label>
                                     <input type="email" name="email" class="form-control" placeholder="Enter Email">
 
-                                    <label>Username</label>
-                                    <input type="text" name="username" class="form-control" placeholder="Enter Username">
-
-
                                     <input type="hidden" name="parent_name" value="N/A" class="form-control">
                                     <input type="hidden" name="parent_contact" value="N/A" class="form-control">
 

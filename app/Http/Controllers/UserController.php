@@ -25,7 +25,7 @@ class UserController extends Controller
                 'role' => "Student",
                 'status' => "Active",
                 'username' => $request->username,
-                'system_no' => date("Ymd") . $latest_no->id,
+                'system_no' => date("Ymdhisa"),
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
@@ -72,8 +72,6 @@ class UserController extends Controller
 
     public function add_user(Request $request){
 
-        $latest_no = User::latest('id')->first();
-
         $user = User::create([
             'complete_name' => $request->complete_name,
             'sex' => $request->sex,
@@ -84,8 +82,8 @@ class UserController extends Controller
             'parent_contact' => $request->parent_contact,
             'role' => $request->role,
             'status' => "Active",
-            'username' => $request->username,
-            'system_no' => date("Ymd") . $latest_no->id,
+            'username' => date("Ymdhisa"),
+            'system_no' => date("Ymdhisa"),
             'email' => $request->email,
             'password' => bcrypt("12345678"),
         ]);
