@@ -25,8 +25,8 @@ class ParentStudent extends Model
         return $this->belongsTo(User::class, 'parent_id');
     }
 
-    public function get_student(){
-        return $this->belongsTo(User::class, 'student_id');
+    public function get_student_section(){
+        return $this->belongsTo(SchoolYearSectionDetails::class, 'student_id');
     }
 
 }

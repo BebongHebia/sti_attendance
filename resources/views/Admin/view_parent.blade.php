@@ -1,4 +1,4 @@
-@extends('SuperAdmin.sidebar')
+@extends('Admin.sidebar')
 @section('content')
 
 

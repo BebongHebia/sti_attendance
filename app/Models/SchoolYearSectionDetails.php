@@ -19,4 +19,8 @@ class SchoolYearSectionDetails extends Model
     function get_student(){
         return $this->belongsTo(User::class, 'student_id');
     }
+    function get_section(){
+        return $this->belongsTo(SySection::class, 'sys_id');
+
+    }
 }

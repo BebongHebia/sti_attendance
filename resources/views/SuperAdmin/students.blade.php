@@ -23,7 +23,7 @@
             <div class="container-fluid">
 
                 <div class="row">
-                    <div class="col-sm-12">
+                    <div class="col-sm-10">
                         <button class="btn btn-success" data-toggle="modal" data-target="#add_student_modal">
                             <i class="fas fa-plus"></i> Add Student
                         </button>
@@ -84,6 +84,12 @@
                         <!-- /.modal -->
 
                     </div>
+
+                    <div class="col-sm-2">
+                        <a href="{{ url('/super-admin-students/qr-codes') }}" class="btn btn-warning btn-block">
+                            Generate QR Code
+                        </a>
+                    </div>
                 </div>
 
                 <div class="row mt-2">
@@ -103,6 +109,7 @@
                                         <th>Parent Name</th>
                                         <th>Parent Contact</th>
                                         <th>Email</th>
+                                        <th>QR Code</th>
                                         <th>Action</th>
                                     </thead>
                                     <tbody id="student_table_body">
@@ -147,6 +154,9 @@
                                 <td>${students.parent_name}</td>
                                 <td>${students.parent_contact}</td>
                                 <td>${students.email}</td>
+                                <td>
+                                    <img src='https://barcode.tec-it.com/barcode.ashx?data=${students.system_no}&code=MobileQRUrl'/>
+                                </td>
                                 <td>
                                     <button class="btn btn-primary" data-toggle="modal" data-target="#edit_student_modal${students.id}">
                                         <i class="fas fa-edit"></i>

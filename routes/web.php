@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Event;
+use App\Models\Support;
 use App\Models\SySection;
 use App\Models\Attendance;
 use App\Models\ParentStudent;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Models\SchoolYearSectionDetails;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SySectionController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ParentStudentController;
@@ -38,6 +40,12 @@ Route::get('/get-student', function(){
     $students = User::where('role', 'Student')->get();
     return response()->json($students);
 });
+
+Route::get('/search-student/key={search_text}', function($search_text){
+    $students = User::where('role', 'Student')->where('complete_name', 'like', "%{$search_text}%")->get();
+    return response()->json($students);
+});
+
 Route::get('/get-parent', function(){
     $parent = User::where('role', 'Parent')->get();
     return response()->json($parent);
@@ -60,7 +68,7 @@ Route::get('/fetch-section-member/section-id={sec_id}', function($sec_id){
 });
 
 Route::get('/get-parent-student/parent-id={parent_id}', function($parent_id){
-    $parent_student = ParentStudent::where('parent_id', $parent_id)->with(['get_sy_section', 'get_student'])->get();
+    $parent_student = ParentStudent::where('parent_id', $parent_id)->with(['get_student_section.get_section', 'get_student_section.get_student'])->get();
     return response()->json($parent_student);
 });
 
@@ -81,9 +89,56 @@ Route::get('/fetch-attendance-sheet', function(){
     return response()->json($attendance);
 });
 
+Route::get('/filter-attendance-sheet/event-id={event_id}', function($event_id){
+    $attendance = Attendance::where('event_id', $event_id)->with(['get_event'])->get();
+
+    return response()->json($attendance);
+});
+
 Route::get('/fetch-attendance-details/att-d-id={att_id}', function($att_id){
     $attendance_details = AttendanceDetail::where('attendance_id', $att_id)->with(['get_section_details.get_student', 'get_attendance.get_event'])->get();
     return response()->json($attendance_details);
+});
+
+Route::get('/get_event_attendance/event-id={event_id}', function($event_id){
+    $attendance = Attendance::where('event_id', $event_id)->get();
+    return response()->json($attendance);
+});
+
+Route::get('/get-attendance/event-id={event_id}/sys-d-id={sys_d_id}/attendance-id={attendance_id}', function($event_id, $sys_d_id, $attendance_id) {
+    $attendance = App\Models\AttendanceDetail::where('attendance_id', $attendance_id)
+                                              ->where('sys_d_id', $sys_d_id)
+                                              ->count();
+
+    return response()->json($attendance); // Return the count as a JSON response
+});
+
+Route::get('/get-my-message/user-id={user_id}', function($user_id){
+    $message = Support::where('user_id', $user_id)->with(['get_user'])->get();
+    return response()->json($message);
+});
+
+
+Route::get('/super-admin-reports/event-id={event_id}', function($event_id){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        $events = Event::find($event_id);
+
+        return view('SuperAdmin.event_reports', ['events' => $events]);
+    }else{
+        return redirect('/');
+    }
+
+});
+
+Route::get('/admin-reports/event-id={event_id}', function($event_id){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        $events = Event::find($event_id);
+
+        return view('Admin.event_reports', ['events' => $events]);
+    }else{
+        return redirect('/');
+    }
+
 });
 
 Route::get('/', function () {
@@ -112,6 +167,7 @@ Route::post('/add-student-sysd', [SchoolYearSectionDetailsController::class, 'ad
 Route::post('/remove-sys-details', [SchoolYearSectionDetailsController::class, 'remove_sys_details']);
 
 Route::post('/add-student-parent', [ParentStudentController::class, 'add_parent_student']);
+Route::post('/remove-student-parent', [ParentStudentController::class, 'remove_parent_student']);
 
 Route::post('/add-event', [EventController::class, 'add_event']);
 Route::post('/edit-event', [EventController::class, 'edit_event']);
@@ -122,6 +178,8 @@ Route::post('/edit_attendance', [AttendanceController::class, 'edit_attendance']
 Route::post('/delete-attendance', [AttendanceController::class, 'delete_attendance']);
 
 Route::post('/delete-attendance-details', [AttendanceDetailController::class, 'delete_att_de']);
+
+Route::post('/add-support-message', [SupportController::class, 'add_support_message']);
 
 //Routings
 Route::get('/student-dashboard', function(){
@@ -180,9 +238,41 @@ Route::get('/super-admin-students', function(){
     }
 });
 
+Route::get('/super-admin-students/qr-codes', function(){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        return view('SuperAdmin.qr_codes');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/admin-students/qr-codes', function(){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        return view('Admin.qr_codes');
+    }else{
+        return redirect('/');
+    }
+});
+
 Route::get('/super-admin-parents', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){
         return view('SuperAdmin.parents');
+    }else{
+        return redirect('/');
+    }
+});
+
+
+
+Route::get('/admin-parent', function(){
+    if (Auth::check() && auth()->user()->role == "Admin"){Route::get('/super-admin-parents', function(){
+        if (Auth::check() && auth()->user()->role == "Super-Admin"){
+            return view('SuperAdmin.parents');
+        }else{
+            return redirect('/');
+        }
+    });
+        return view('Admin.parents');
     }else{
         return redirect('/');
     }
@@ -199,9 +289,28 @@ Route::get('/super-admin-parents/view-parent/{parent_id}', function($parent_id){
     }
 });
 
+Route::get('/admin-parents/view-parent/{parent_id}', function($parent_id){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+
+        $parent = User::find($parent_id);
+
+        return view('Admin.view_parent', ['parent' => $parent]);
+    }else{
+        return redirect('/');
+    }
+});
+
 Route::get('/super-admin-sy-sections', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){
         return view('SuperAdmin.sy_sections');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/admin-sy-sections', function(){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        return view('Admin.sy_sections');
     }else{
         return redirect('/');
     }
@@ -212,6 +321,16 @@ Route::get('/super-admin-sy-sections/section_member/{section_id}', function($sec
 
         $section = SySection::find($section_id);
         return view('SuperAdmin.section_details', ['section' => $section]);
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/admin-sy-sections/section_member/{section_id}', function($section_id){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+
+        $section = SySection::find($section_id);
+        return view('Admin.section_details', ['section' => $section]);
     }else{
         return redirect('/');
     }
@@ -248,10 +367,40 @@ Route::get('/super-admin-attendace/attendance-id={att_id}', function($att_id){
     }
 });
 
+Route::get('/admin-attendace/attendance-id={att_id}', function($att_id){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+
+        $attendance_details = Attendance::find($att_id);
+
+        $attendance = AttendanceDetail::where('attendance_id', $att_id)->get();
+
+        return view('Admin.attendance_details', ['attendance' => $attendance, 'attendance_details' => $attendance_details]);
+
+    }else{
+        return redirect('/');
+    }
+});
+
 
 Route::get('/super-admin-reports', function(){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){
         return view('SuperAdmin.reports');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/super-admin-support', function(){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        return view('SuperAdmin.support');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/super-admin-support/details/user-id={user_id}', function($user_id){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        return view('SuperAdmin.support_details', ['user_id' => $user_id]);
     }else{
         return redirect('/');
     }
@@ -321,13 +470,6 @@ Route::get('/parent-events', function(){
     }
 });
 
-Route::get('/parent-attendance', function(){
-    if (Auth::check() && auth()->user()->role == "Parent"){
-        return view('Parent.attendance');
-    }else{
-        return redirect('/');
-    }
-});
 
 Route::get('/parent-my-student', function(){
     if (Auth::check() && auth()->user()->role == "Parent"){
@@ -335,4 +477,17 @@ Route::get('/parent-my-student', function(){
     }else{
         return redirect('/');
     }
+});
+
+Route::get('/parent-supports', function(){
+    if (Auth::check() && auth()->user()->role == "Parent"){
+        return view('Parent.support');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/super-admin-reports/event-id={event_id}/section-id={section_id}', function($event_id, $section_id ){
+
+    return view('print_attendance', ['event_id' => $event_id, 'section_id' => $section_id]);
 });

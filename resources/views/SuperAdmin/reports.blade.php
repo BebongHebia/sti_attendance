@@ -27,6 +27,7 @@
                             <p class="card-text">List of Events</p>
                         </div>
                         <div class="card-body">
+
                             <table class="table table-hover table-striped table-bordered" id="data_table">
                                 <thead class="table-dark">
                                     <th>Event</th>
@@ -71,7 +72,7 @@
                                 <td>${events.status}</td>
                                 <td>
                                     <a href="{{ url('/super-admin-reports/event-id=${events.id}') }}" class="btn btn-primary">
-                                        <i class="fas fa-eye"></i>
+                                        <i class="fas fa-file"></i>
                                     </a>
                                 </td>
                             </tr>

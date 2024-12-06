@@ -92,20 +92,21 @@
                     </a>
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ url('/parent-attendance') }}" class="nav-link">
-                        <i class="nav-icon fas fa-file"></i>
-                        <p>
-                            Attendance
-                        </p>
-                    </a>
-                </li>
 
                 <li class="nav-item">
                     <a href="{{ url('/parent-my-student') }}" class="nav-link">
                         <i class="nav-icon fas fa-users"></i>
                         <p>
                             My Students
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('/parent-supports') }}" class="nav-link">
+                        <i class="nav-icon fas fa-headset"></i>
+                        <p>
+                            Supports
                         </p>
                     </a>
                 </li>

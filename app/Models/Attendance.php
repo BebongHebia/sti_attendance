@@ -20,4 +20,5 @@ class Attendance extends Model
     public function get_event(){
         return $this->belongsTo(Event::class, 'event_id');
     }
+
 }

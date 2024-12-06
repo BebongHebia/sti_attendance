@@ -16,4 +16,10 @@ class ParentStudentController extends Controller
 
         return response()->json();
     }
+
+    public function remove_parent_student(Request $request){
+        $get_parent_student = ParentStudent::find($request->parent_student_id);
+        $get_parent_student->delete();
+        return response()->json();
+    }
 }

@@ -25,15 +25,13 @@ class UserController extends Controller
                 'role' => "Student",
                 'status' => "Active",
                 'username' => $request->username,
-                'system_no' => date("Ymdhisa"),
+                'system_no' => date("Ymdhis"),
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
 
             Alert::success('success', 'Account created successfully');
-
-            Auth::login($user);
-            return redirect('/student-dashboard');
+            return redirect('/');
         }
     }
 
@@ -82,8 +80,8 @@ class UserController extends Controller
             'parent_contact' => $request->parent_contact,
             'role' => $request->role,
             'status' => "Active",
-            'username' => date("Ymdhisa"),
-            'system_no' => date("Ymdhisa"),
+            'username' => date("Ymdhis"),
+            'system_no' => date("Ymdhis"),
             'email' => $request->email,
             'password' => bcrypt("12345678"),
         ]);
