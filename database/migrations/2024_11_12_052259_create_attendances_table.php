@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('date');
             $table->string('place');
             $table->string('att_type');
+            $table->string('day');
             $table->timestamps();
         });
     }

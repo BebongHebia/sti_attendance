@@ -15,6 +15,7 @@ class Attendance extends Model
         'date',
         'place',
         'att_type',
+        'day',
     ];
 
     public function get_event(){

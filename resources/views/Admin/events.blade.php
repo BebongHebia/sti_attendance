@@ -22,7 +22,7 @@
             <div class="row">
                 <div class="col-sm-12">
                     <button class="btn btn-success" data-toggle="modal" data-target="#add_event_modal">
-                        <i class="fas fa-plus"></i> Add Student
+                        <i class="fas fa-plus"></i> Add Event
                     </button>
                     <div class="modal fade" id="add_event_modal">
                         <div class="modal-dialog">

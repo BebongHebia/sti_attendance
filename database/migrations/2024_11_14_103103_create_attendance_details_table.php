@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('student');
             $table->string('type');
             $table->integer('sys_d_id');
+            $table->integer('parent_phone');
+            $table->integer('user_phone');
+            $table->integer('sms_status');
             $table->timestamps();
         });
     }

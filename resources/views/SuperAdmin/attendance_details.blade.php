@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Attendance Details <span style="color:orange; font-weight:bold">{{ $attendance_details->get_event->event }}</span> - <span style="color:orange; font-weight:bold">{{ $attendance_details->att_type }}</span></h1>
+                    <h1 class="m-0">Attendance Details <span style="color:orange; font-weight:bold">{{ $attendance_details->get_event->event }}</span> - <span style="color:orange; font-weight:bold">{{ $attendance_details->att_type }}</span> - Day#: <span style="color:yellowgreen; font-weight:bold">{{ $attendance_details->day }}</span></h1>
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -24,6 +24,59 @@
                     <p class="card-text">List of Attendee</p>
                 </div>
                 <div class="card-body">
+
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <button class="btn btn-success" data-toggle="modal" data-target="#add_attendee_modal">
+                                <i class="fas fa-plus"></i> Add Attendance
+                            </button>
+                            <div class="modal fade" id="add_attendee_modal">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title">Add Attendeee</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="add_attendee_form">
+                                                @csrf
+
+                                                <input type="hidden" name="attendance_id" value="{{ $attendance_details->id }}">
+
+                                                <label>Select section</label>
+                                                <select class="form-select select2" name="section_id" id="section_id" onchange="get_student_member(event)">
+                                                    @php
+                                                        $get_active_section = App\Models\SySection::where('status', 'Active')->get();
+                                                    @endphp
+                                                    @foreach ($get_active_section as $item_get_active_section)
+                                                        <option value="{{ $item_get_active_section->id }}">{{ $item_get_active_section->section_name }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                                <label>Select Student</label>
+                                                <select class="form-select select2" name="sys_d_id" id="student_id">
+
+                                                </select>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer justify-content-between">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            <button type="button" onclick="add_attendee(event)" class="btn btn-primary">Submit</button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal-dialog -->
+                            </div>
+                            <!-- /.modal -->
+
+
+                        </div>
+                    </div>
+
                     <table class="table table-hover table-bordered table-striped" id="data_table">
                         <thead class="table-dark">
                             <th>Student</th>
@@ -108,6 +161,51 @@
                     });
 
                     $('#attendance_table_body').html(rows);
+                }
+            });
+        }
+
+        function add_attendee(event){
+            event.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: `{{ url('/add-attendee') }}`,
+                data: $('#add_attendee_form').serialize(),
+                success: function (data) {
+                    $('#add_attendee_modal').modal('hide');
+
+                    display_attendance_details();
+
+                    Swal.fire({
+                        title: 'Added',
+                        text: 'Attendee Added successfully',
+                        icon: 'success',
+                    });
+                }
+            });
+        }
+
+        function get_student_member(event){
+            event.preventDefault();
+
+            var section_id = $('#section_id').val();
+
+            $.ajax({
+                type: "GET",
+                url: `{{ url('/get-section-members/section-id=${section_id}') }}`,
+                success: function (data) {
+                    let rows = '';
+
+                    $.each(data, function (index, section_members) {
+                        rows += `
+
+                            <option value="${section_members.id}">${section_members.get_student.complete_name}</option>
+
+                        `;
+                    });
+
+                    $('#student_id').html(rows);
                 }
             });
         }

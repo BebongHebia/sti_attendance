@@ -42,7 +42,7 @@
                                     @endphp
                                     @foreach ($get_event_Attendance as $item_get_event_Attendance)
                                         <th>
-                                            {{ $item_get_event_Attendance->att_type }}
+                                            {{ $item_get_event_Attendance->att_type }} - Day# {{ $item_get_event_Attendance->day }}
                                         </th>
                                     @endforeach
                                 </thead>

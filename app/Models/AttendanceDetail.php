@@ -14,6 +14,9 @@ class AttendanceDetail extends Model
         'student',
         'type',
         'sys_d_id',
+        'parent_phone',
+        'user_phone',
+        'sms_status',
     ];
 
     public function get_section_details(){

@@ -118,6 +118,10 @@ Route::get('/get-my-message/user-id={user_id}', function($user_id){
     return response()->json($message);
 });
 
+Route::get('/get-section-members/section-id={section_id}', function($section_id){
+    $section_members = SchoolYearSectionDetails::where('sys_id', $section_id)->with(['get_student', 'get_section'])->get();
+    return response()->json($section_members);
+});
 
 Route::get('/super-admin-reports/event-id={event_id}', function($event_id){
     if (Auth::check() && auth()->user()->role == "Super-Admin"){
@@ -180,6 +184,10 @@ Route::post('/delete-attendance', [AttendanceController::class, 'delete_attendan
 Route::post('/delete-attendance-details', [AttendanceDetailController::class, 'delete_att_de']);
 
 Route::post('/add-support-message', [SupportController::class, 'add_support_message']);
+
+Route::post('/add-attendee', [AttendanceDetailController::class, 'add_attendee']);
+
+
 
 //Routings
 Route::get('/student-dashboard', function(){

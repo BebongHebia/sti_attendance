@@ -64,6 +64,19 @@
                                                     </div>
                                                 </div>
 
+                                                <label>Day</label>
+                                                <select class="form-select select2" name="day">
+                                                   <option value="1">1</option>
+                                                   <option value="2">2</option>
+                                                   <option value="3">3</option>
+                                                   <option value="4">4</option>
+                                                   <option value="5">5</option>
+                                                   <option value="6">6</option>
+                                                   <option value="7">7</option>
+                                                   <option value="8">8</option>
+                                                   <option value="9">9</option>
+                                                   <option value="10">10</option>
+                                                </select>
 
 
                                                 <label>Attendance Type</label>
@@ -124,6 +137,7 @@
                                     <th>Date</th>
                                     <th>Place</th>
                                     <th>Attendance Type</th>
+                                    <th>Day</th>
                                     <th>Action</th>
                                 </thead>
                                 <tbody id="attendance_table_body">
@@ -163,6 +177,7 @@
                                 <td>${attendance.date}</td>
                                 <td>${attendance.place}</td>
                                 <td>${attendance.att_type}</td>
+                                <td>${attendance.day}</td>
                                 <td>
                                     <a href="/super-admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
                                         <i class="fas fa-file"></i>
@@ -239,6 +254,20 @@
                                                                     </div>
                                                                 </div>
 
+                                                                <label>Day</label>
+                                                                <select class="form-select select2" name="day">
+                                                                    <option value="${attendance.day}">${attendance.day}</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                <option value="10">10</option>
+                                                                </select>
 
 
                                                                 <label>Attendance Type</label>
@@ -293,6 +322,7 @@
                                 <td>${attendance.date}</td>
                                 <td>${attendance.place}</td>
                                 <td>${attendance.att_type}</td>
+                                <td>${attendance.day}</td>
                                 <td>
                                     <a href="/super-admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
                                         <i class="fas fa-file"></i>
@@ -369,6 +399,20 @@
                                                                     </div>
                                                                 </div>
 
+                                                                <label>Day</label>
+                                                                <select class="form-select select2" name="day">
+                                                                    <option value="${attendance.day}">${attendance.day}</option>
+                                                                    <option value="1">1</option>
+                                                                    <option value="2">2</option>
+                                                                    <option value="3">3</option>
+                                                                    <option value="4">4</option>
+                                                                    <option value="5">5</option>
+                                                                    <option value="6">6</option>
+                                                                    <option value="7">7</option>
+                                                                    <option value="8">8</option>
+                                                                    <option value="9">9</option>
+                                                                    <option value="10">10</option>
+                                                                </select>
 
 
                                                                 <label>Attendance Type</label>
