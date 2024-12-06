@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="col-sm-2">
-                        <a href="{{ url('/admin-students/qr-codes') }}" class="btn btn-warning btn-block">
+                        <a href="{{ url('/super-admin-students/qr-codes') }}" class="btn btn-warning btn-block">
                             Generate QR Code
                         </a>
                     </div>
@@ -165,6 +165,40 @@
                                     <button class="btn btn-danger" data-toggle="modal" data-target="#delete_student_modal${students.id}">
                                         <i class="fas fa-trash"></i>
                                     </button>
+
+                                    <button class="btn btn-warning" data-toggle="modal" data-target="#reset_account_sec_modal${students.id}">
+                                        <i class="fas fa-circle"></i>
+                                    </button>
+
+                                    <div class="modal fade" id="reset_account_sec_modal${students.id}">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                <h4 class="modal-title">Reset Account</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                <form id="reset_acc_form${students.id}">
+                                                    @csrf
+                                                    <input type="hidden" name="user_id" value="${students.id}">
+
+                                                    <h5 class="text-center">Confirming Account Reset</h5>
+
+
+                                                </form>
+                                                </div>
+                                                <div class="modal-footer justify-content-between">
+                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                                    <button type="button" onclick="reset_account(event, ${students.id})" class="btn btn-warning">Confirm</button>
+                                                </div>
+                                            </div>
+                                        <!-- /.modal-content -->
+                                        </div>
+                                        <!-- /.modal-dialog -->
+                                    </div>
+                                    <!-- /.modal -->
 
                                     <div class="modal fade" id="delete_student_modal${students.id}">
                                         <div class="modal-dialog">
@@ -274,6 +308,26 @@
 
                 $('#student_table_body').html(rows);
                 $('.select2').select2();
+            }
+        });
+    }
+
+    function reset_account(event, student_id){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: `{{ url('/reset-account') }}`,
+            data: $('#reset_acc_form' + student_id).serialize(),
+            success: function (data) {
+                $('#reset_acc_form' + student_id)[0].reset();
+                $('#reset_account_sec_modal' + student_id).modal('hide');
+
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Account Reseted',
+                    icon: 'success',
+                });
             }
         });
     }

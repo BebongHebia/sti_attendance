@@ -187,7 +187,11 @@ Route::post('/add-support-message', [SupportController::class, 'add_support_mess
 
 Route::post('/add-attendee', [AttendanceDetailController::class, 'add_attendee']);
 
+Route::post('/save-profile', [UserController::class, 'save_profile']);
 
+Route::post('/save-user-security', [UserController::class, 'save_security_details']);
+
+Route::post('/reset-account', [UserController::class, 'account_reset']);
 
 //Routings
 Route::get('/student-dashboard', function(){
@@ -490,6 +494,38 @@ Route::get('/parent-my-student', function(){
 Route::get('/parent-supports', function(){
     if (Auth::check() && auth()->user()->role == "Parent"){
         return view('Parent.support');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/super-admin-profile', function(){
+    if (Auth::check() && auth()->user()->role == "Super-Admin"){
+        return view('SuperAdmin.profile');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/admin-profile', function(){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        return view('Admin.profile');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/parent-profile', function(){
+    if (Auth::check() && auth()->user()->role == "Parent"){
+        return view('Parent.profile');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/student-profile', function(){
+    if (Auth::check() && auth()->user()->role == "Student"){
+        return view('Student.profile');
     }else{
         return redirect('/');
     }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
@@ -106,6 +107,70 @@ class UserController extends Controller
     public function delete_user(Request $request){
         $users = User::find($request->user_id);
         $users->delete();
+        return response()->json();
+    }
+
+    public function save_profile(Request $request){
+        $user = User::find($request->user_id);
+        $user->complete_name = $request->complete_name;
+        $user->sex = $request->sex;
+        $user->bday = $request->bday;
+        $user->address = $request->address;
+        $user->phone = $request->phone;
+        $user->parent_name = $request->parent_name;
+        $user->parent_contact = $request->parent_contact;
+        $user->email = $request->email;
+        $user->save();
+
+        Alert::success('Success', 'Account Edited Successfully');
+
+        return redirect()->back();
+    }
+
+    public function save_security_details(Request $request){
+        $inputs = $request->validate([
+            'username' => 'required',
+            'password' => 'required',
+        ]);
+
+        if ($request->n_password == $request->cn_password){
+
+
+            if (Auth::attempt($inputs)) {
+
+                if ($request->n_username == null || $request->n_username == ""){
+                    $user = User::find($request->user_id);
+                    $user->password = bcrypt($request->n_password);
+                    $user->save();
+                }else{
+                    $user = User::find($request->user_id);
+                    $user->password = bcrypt($request->n_password);
+                    $user->username = $request->n_username;
+                    $user->save();
+                }
+
+                Alert::success('Success');
+                return redirect()->back();
+            }else{
+                Alert::warning('Faild', 'Sory, cannot find account, please check credentials and try again');
+                return redirect()->back();
+            }
+
+
+        }else{
+            Alert::warning('Faild', 'Password does not match.');
+            return redirect()->back();
+        }
+
+
+    }
+
+
+    public function account_reset(Request $request){
+        $user = User::find($request->user_id);
+        $user->username = $user->system_no;
+        $user->password = bcrypt('12345678');
+        $user->save();
         return response()->json();
 
     }
