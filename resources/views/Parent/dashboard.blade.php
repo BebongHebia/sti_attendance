@@ -39,7 +39,7 @@
                         <span class="info-box-text">Upcomming Event</span>
                         <span class="info-box-number">
                             @php
-                            $get_upcomming_event = App\Models\Event::where('status', 'Upcomming')->count();
+                            $get_upcomming_event = App\Models\Event::where('status', 'Incoming')->count();
                             @endphp
                             {{ $get_upcomming_event }}
                         </span>
