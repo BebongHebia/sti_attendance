@@ -28,12 +28,16 @@
 
     </style>
 </head>
-<body>
+<body style="background-image: url('images/login_background.png'); background-size:cover; background-position:center; background-repeat:no-repeat">
     <section class="vh-100">
         <div class="container-fluid h-custom">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col-md-9 col-lg-6 col-xl-5">
-                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp" class="img-fluid" alt="Sample image">
+                    <center>
+                        <img src="{{ asset('images/logo.png') }}" class="img-fluid" alt="Sample image">
+                        <h1 class="text-center">S.E.A.M.S</h1>
+                    </center>
+
                 </div>
                 <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
                     <h4 class="text-start">Login</h4>
@@ -51,10 +55,10 @@
                             <input type="password" required name="password" id="form3Example4" class="form-control form-control-lg" placeholder="Enter password" />
                         </div>
 
-
+                        <!-- Password input -->
                         <div class="text-center text-lg-start mt-4 pt-2">
                             <button data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg" style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
-                            <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="{{ url('/create-account-page') }}" class="link-danger">Register</a></p>
+                            <!--<p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="{{ url('/create-account-page') }}" class="link-danger">Register</a></p>-->
                         </div>
 
                     </form>
