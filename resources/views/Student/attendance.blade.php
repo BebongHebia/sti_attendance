@@ -3,6 +3,16 @@
 
 @php
     $get_latest_sec = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->first();
+    $get_latest_sec_count = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->count();
+
+
+    if($get_latest_sec_count == 0){
+        $latest_section_id = 0;
+    }else{
+
+        $latest_section_id = $get_latest_sec->id;
+    }
+
 @endphp
 
 
@@ -12,7 +22,7 @@
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">Attendance</h1>
-                    <input type="hidden" value="{{ $get_latest_sec->id }}" id="student_id">
+                    <input type="hidden" value="{{ $latest_section_id }}" id="student_id">
                 </div><!-- /.col -->
             </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -53,6 +63,7 @@
                                     <thead>
                                         @php
                                             $get_attendance = App\Models\Attendance::where('event_id', $item_get_events->id)->get();
+                                            $get_attendance_count = App\Models\Attendance::where('event_id', $item_get_events->id)->count();
                                         @endphp
                                         @foreach ($get_attendance as $item_get_attendance)
                                             <th>
@@ -61,7 +72,16 @@
                                         @endforeach
                                     </thead>
                                     <tbody>
-                                        <tr>
+
+                                    
+                                    @if($get_attendance_count == 0)
+
+                                    
+
+
+                                    @else
+
+                                    <tr>
                                             @foreach ($get_attendance as $item_get_attendance)
 
 
@@ -79,6 +99,10 @@
 
                                             @endforeach
                                         </tr>
+
+                                    @endif
+
+                                        
                                     </tbody>
                                 </table>
                             </div>

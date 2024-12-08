@@ -109,7 +109,7 @@ Route::get('/get-attendance/event-id={event_id}/sys-d-id={sys_d_id}/attendance-i
     $attendance = App\Models\AttendanceDetail::where('attendance_id', $attendance_id)
                                               ->where('sys_d_id', $sys_d_id)
                                               ->count();
-
+    //return dd($attendance);
     return response()->json($attendance); // Return the count as a JSON response
 });
 

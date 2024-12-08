@@ -106,11 +106,12 @@
 
 <script>
     display_parent_student();
-    function get_event_attendance(event, sys_d_id) {
+    function get_event_attendance(event, this_event_id, sys_d_id) {
     event.preventDefault();
 
     // Get the selected event_id from the dropdown
-    var event_id = $('#event_id_' + sys_d_id).val();
+    var event_id = $('#event_id_' + this_event_id).val();
+    console.log(event_id);
 
     // Make the first AJAX call to fetch attendance types (AM-IN, AM-OUT, PM-IN, PM-OUT)
     $.ajax({
@@ -132,7 +133,7 @@
             });
 
             // Set the table headers (do this once)
-            $('#table_header' + sys_d_id).html(rows_header);
+            $('#table_header' + this_event_id).html(rows_header);
 
             let requestsRemaining = data.length;  // Track remaining AJAX requests for attendance counts
 
@@ -140,8 +141,10 @@
             $.each(data, function (index, attendance) {
                 $.ajax({
                     type: "GET",
-                    url: `{{ url('/get-attendance/event-id=${event_id}/sys-d-id=${sys_d_id}/attendance-id=${attendance.id}') }}`, // Dynamic URL
+                    url: `{{ url('/get-attendance/event-id=c/sys-d-id=${sys_d_id}/attendance-id=${attendance.id}') }}`, // Dynamic URL
                     success: function (attendanceCount) {
+
+                        console.log("event id" + sys_d_id);
                         // Store the attendance count in the corresponding attendance type slot
                         attendanceCounts[attendance.att_type] = attendanceCount;
 
@@ -165,7 +168,7 @@
                             rows_body += '</tr>';
 
                             // Update the table body with the newly constructed row
-                            $('#table_body' + sys_d_id).html(rows_body);
+                            $('#table_body' + this_event_id).html(rows_body);
                         }
                     }
                 });
@@ -173,7 +176,6 @@
         }
     });
 
-    console.log(sys_d_id);
 }
 
 
@@ -208,7 +210,7 @@ function display_parent_student() {
                             <div class="row">
                                 <div class="col-sm-4">
                                     <label>Select Event</label>
-                                    <select class="form-select select2" id="event_id_${parent_students.id}" name="event_id_${parent_students.id}" style="width:100%;" onchange="get_event_attendance(event, ${parent_students.id})">
+                                    <select class="form-select select2" id="event_id_${parent_students.id}" name="event_id_${parent_students.id}" style="width:100%;" onchange="get_event_attendance(event, ${parent_students.id}, ${parent_students.get_student_section.id})">
                                         @php
                                             $event = App\Models\Event::all();
                                         @endphp

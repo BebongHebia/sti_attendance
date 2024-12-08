@@ -58,14 +58,31 @@
                         <span class="info-box-number">
 
                             @php
-                                $get_my_current_section = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->first();
-                                $my_attendance = App\Models\AttendanceDetail::where('sys_d_id', $get_my_current_section->id)->count();
+                                
+                                $get_my_current_section_count = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->count();
+                                
                             @endphp
 
-                            @if ($get_my_current_section == 0)
-                                No Current Section
+                            @if ($get_my_current_section_count == 0)
+                                No Attendance Yet
                             @else
-                                {{ $my_attendance }}
+
+                            @php    
+                                $get_my_current_section = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->first();
+                                $my_attendance = App\Models\AttendanceDetail::where('sys_d_id', $get_my_current_section->id)->count();
+
+                            @endphp
+
+                                
+                                @if($my_attendance >= 1)
+                                    {{ $my_attendance }}
+                                @else
+                                No Attedance Yet
+                                @endif
+
+                                
+
+
                             @endif
 
 
@@ -87,9 +104,16 @@
 
                             @php
                                 $get_my_current_section = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->first();
+                                $get_my_current_section_count = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->count();
 
                             @endphp
+                            @if($get_my_current_section_count == 0)
+                                No Section
+
+                            @else
                             {{ $get_my_current_section->get_section->section_name }} | {{ $get_my_current_section->get_section->school_year }} | {{ $get_my_current_section->get_section->grade_lvl }}
+                            @endif
+                            
 
                         </span>
                     </div>
