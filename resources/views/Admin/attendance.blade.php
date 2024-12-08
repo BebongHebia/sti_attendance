@@ -179,7 +179,7 @@
                                 <td>${attendance.att_type}</td>
                                 <td>${attendance.day}</td>
                                 <td>
-                                    <a href="/super-admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
+                                    <a href="/admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
                                         <i class="fas fa-file"></i>
                                     </a>
 
@@ -324,7 +324,7 @@
                                 <td>${attendance.att_type}</td>
                                 <td>${attendance.day}</td>
                                 <td>
-                                    <a href="/super-admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
+                                    <a href="/admin-attendace/attendance-id=${attendance.id}" class="btn btn-warning">
                                         <i class="fas fa-file"></i>
                                     </a>
 

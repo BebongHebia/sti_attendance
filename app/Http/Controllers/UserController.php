@@ -96,6 +96,8 @@ class UserController extends Controller
         $users->bday = $request->bday;
         $users->address = $request->address;
         $users->phone = $request->phone;
+        $users->parent_name = $request->parent_name;
+        $users->parent_contact = $request->parent_contact;
         $users->status = $request->status;
         $users->username = $request->username;
         $users->email = $request->email;

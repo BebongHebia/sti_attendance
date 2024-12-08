@@ -86,7 +86,7 @@
                     </div>
 
                     <div class="col-sm-2">
-                        <a href="{{ url('/super-admin-students/qr-codes') }}" class="btn btn-warning btn-block">
+                        <a href="{{ url('/admin-students/qr-codes') }}" class="btn btn-warning btn-block">
                             Generate QR Code
                         </a>
                     </div>
