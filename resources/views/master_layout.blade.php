@@ -49,6 +49,25 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+
+    <style>
+
+input.form-control:-webkit-autofill,
+input.form-control:-webkit-autofill:hover,
+input.form-control:-webkit-autofill:focus {
+    background-color: #343a40 !important; /* Matches dark theme background */
+    color: #ffffff !important;          /* Text color */
+    -webkit-box-shadow: 0 0 0px 1000px #343a40 inset !important; /* Remove autofill background color */
+    border-color: #495057 !important;  /* Border color */
+}
+
+input.form-control {
+    background-color: #343a40; /* Default dark mode input background */
+    color: #ffffff;            /* Default dark mode text color */
+}
+    </style>
+
+
 </head>
 <body class="hold-transition dark-mode sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
     <div class="wrapper">
