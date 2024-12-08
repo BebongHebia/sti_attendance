@@ -61,7 +61,13 @@
                                 $get_my_current_section = App\Models\SchoolYearSectionDetails::where('student_id', auth()->user()->id)->latest()->first();
                                 $my_attendance = App\Models\AttendanceDetail::where('sys_d_id', $get_my_current_section->id)->count();
                             @endphp
-                            {{ $my_attendance }}
+
+                            @if ($get_my_current_section == 0)
+                                No Current Section
+                            @else
+                                {{ $my_attendance }}
+                            @endif
+
 
                         </span>
                     </div>
