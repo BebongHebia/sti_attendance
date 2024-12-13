@@ -164,14 +164,15 @@
                                 <td>${students.parent_name}</td>
                                 <td>${students.parent_contact}</td>
                                 <td>${students.email}</td>
+
+                                <td>
+                                    <img src='https://barcode.tec-it.com/barcode.ashx?data=${students.system_no}&code=MobileQRUrl'/>
+                                </td>
                                 <td>
                                     <span style="${style}">
                                         ${students.status}
                                     </span>
 
-                                </td>
-                                <td>
-                                    <img src='https://barcode.tec-it.com/barcode.ashx?data=${students.system_no}&code=MobileQRUrl'/>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary" data-toggle="modal" data-target="#edit_student_modal${students.id}">
