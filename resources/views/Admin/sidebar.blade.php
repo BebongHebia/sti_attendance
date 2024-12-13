@@ -137,6 +137,15 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{{ url('/admin-supports') }}" class="nav-link">
+                        <i class="nav-icon fas fa-headset"></i>
+                        <p>
+                            Supports
+                        </p>
+                    </a>
+                </li>
+
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

@@ -110,6 +110,7 @@
                                         <th>Parent Contact</th>
                                         <th>Email</th>
                                         <th>QR Code</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </thead>
                                     <tbody id="student_table_body">
@@ -142,7 +143,18 @@
             , success: function(data) {
                 let rows = '';
 
+
+
                 $.each(data, function(index, students) {
+
+                    let style;
+
+                    if (students.status == "Active"){
+                        style = "background-color:green; color:white; padding:10px; border-radius:10px";
+                    }else{
+                        style = "background-color:red; color:white; padding:10px; border-radius:10px";
+                    }
+
                     rows += `
 
                             <tr>
@@ -154,6 +166,14 @@
                                 <td>${students.parent_name}</td>
                                 <td>${students.parent_contact}</td>
                                 <td>${students.email}</td>
+                                <td>
+
+                                    <span style="${style}">
+                                        ${students.status}
+                                    </span>
+
+
+                                </td>
                                 <td>
                                     <img src='https://barcode.tec-it.com/barcode.ashx?data=${students.system_no}&code=MobileQRUrl'/>
                                 </td>

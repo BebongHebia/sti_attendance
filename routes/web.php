@@ -535,3 +535,20 @@ Route::get('/super-admin-reports/event-id={event_id}/section-id={section_id}', f
 
     return view('print_attendance', ['event_id' => $event_id, 'section_id' => $section_id]);
 });
+
+
+Route::get('/admin-supports', function(){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        return view('Admin.support');
+    }else{
+        return redirect('/');
+    }
+});
+
+Route::get('/admin-supports/details/user-id={user_id}', function($user_id){
+    if (Auth::check() && auth()->user()->role == "Admin"){
+        return view('Admin.support_details', ['user_id' => $user_id]);
+    }else{
+        return redirect('/');
+    }
+});
