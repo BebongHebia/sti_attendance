@@ -13,7 +13,7 @@ class EventController extends Controller
             'description' => $request->description,
             'date' => $request->date,
             'place' => $request->place,
-            'status' => 'Inocoming',
+            'status' => 'Incoming',
         ]);
 
         return response()->json();
