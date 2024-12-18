@@ -14,6 +14,7 @@ use App\Models\SchoolYearSectionDetails;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\SySectionController;
+use App\Http\Controllers\UserImageController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\ParentStudentController;
 use App\Http\Controllers\AttendanceDetailController;
@@ -192,6 +193,10 @@ Route::post('/save-profile', [UserController::class, 'save_profile']);
 Route::post('/save-user-security', [UserController::class, 'save_security_details']);
 
 Route::post('/reset-account', [UserController::class, 'account_reset']);
+
+Route::post('/add-user-image', [UserImageController::class, 'add_user_image']);
+
+
 
 //Routings
 Route::get('/student-dashboard', function(){
@@ -552,3 +557,4 @@ Route::get('/admin-supports/details/user-id={user_id}', function($user_id){
         return redirect('/');
     }
 });
+

@@ -250,7 +250,7 @@
 
 
                                     <div class="modal fade" id="edit_student_modal${students.id}">
-                                        <div class="modal-dialog">
+                                        <div class="modal-dialog modal-lg">
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                 <h4 class="modal-title">Edit Student Modal</h4>
@@ -259,48 +259,58 @@
                                                 </button>
                                                 </div>
                                                 <div class="modal-body">
-                                                <form id="edit_student_form${students.id}">
-                                                    @csrf
-                                                    <input type="hidden" name="role" value="Student">
-                                                    <input type="hidden" name="user_id" value="${students.id}">
 
-                                                    <label>Complete Name</label>
-                                                    <input type="text" name="complete_name" value="${students.complete_name}" class="form-control" placeholder="Enter Complete name">
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <form id="edit_student_form${students.id}">
+                                                                @csrf
+                                                                <input type="hidden" name="role" value="Student">
+                                                                <input type="hidden" name="user_id" value="${students.id}">
 
-                                                    <label>Sex</label>
-                                                    <select class="form-select select2" name="sex">
-                                                        <option value="${students.sex}">${students.sex}</option>
-                                                        <option value="Male">Male</option>
-                                                        <option value="Female">Female</option>
-                                                    </select>
+                                                                <label>Complete Name</label>
+                                                                <input type="text" name="complete_name" value="${students.complete_name}" class="form-control" placeholder="Enter Complete name">
 
-                                                    <label>Birthday</label>
-                                                    <input type="date" value="${students.bday}" name="bday" class="form-control">
+                                                                <label>Sex</label>
+                                                                <select class="form-select select2" name="sex">
+                                                                    <option value="${students.sex}">${students.sex}</option>
+                                                                    <option value="Male">Male</option>
+                                                                    <option value="Female">Female</option>
+                                                                </select>
 
-                                                    <label>Address</label>
-                                                    <input type="text" value="${students.address}" name="address" class="form-control" placeholder="Enter Address">
+                                                                <label>Birthday</label>
+                                                                <input type="date" value="${students.bday}" name="bday" class="form-control">
 
-                                                    <label>Phone</label>
-                                                    <input type="text" value="${students.phone}" name="phone" class="form-control" placeholder="Enter Phone">
+                                                                <label>Address</label>
+                                                                <input type="text" value="${students.address}" name="address" class="form-control" placeholder="Enter Address">
 
-                                                    <label>Email</label>
-                                                    <input type="email" value="${students.email}" name="email"  class="form-control" placeholder="Enter Email">
+                                                                <label>Phone</label>
+                                                                <input type="text" value="${students.phone}" name="phone" class="form-control" placeholder="Enter Phone">
 
-                                                    <label>Parent Name</label>
-                                                    <input type="text" value="${students.parent_name}" name="parent_name"  class="form-control" placeholder="Enter Email">
+                                                                <label>Email</label>
+                                                                <input type="email" value="${students.email}" name="email"  class="form-control" placeholder="Enter Email">
 
-                                                    <label>Parent Contact</label>
-                                                    <input type="text" value="${students.parent_contact}" name="parent_contact"  class="form-control" placeholder="Enter Email">
+                                                                <label>Parent Name</label>
+                                                                <input type="text" value="${students.parent_name}" name="parent_name"  class="form-control" placeholder="Enter Email">
 
-                                                    <label>Status</label>
-                                                    <select class="form-select select2" name="status">
-                                                        <option value="${students.status}" selected>${students.status} Selected</option>
-                                                        <option value="Active">Active</option>
-                                                        <option value="Inactive">Inactive</option>
-                                                    </select>
+                                                                <label>Parent Contact</label>
+                                                                <input type="text" value="${students.parent_contact}" name="parent_contact"  class="form-control" placeholder="Enter Email">
+
+                                                                <label>Status</label>
+                                                                <select class="form-select select2" name="status">
+                                                                    <option value="${students.status}" selected>${students.status} Selected</option>
+                                                                    <option value="Active">Active</option>
+                                                                    <option value="Inactive">Inactive</option>
+                                                                </select>
 
 
-                                                </form>
+                                                            </form>
+                                                        </div>
+                                                        <div class="col-sm-6">
+
+                                                        </div>
+                                                    </div>
+
+
                                                 </div>
                                                 <div class="modal-footer justify-content-between">
                                                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -312,11 +322,6 @@
                                         <!-- /.modal-dialog -->
                                     </div>
                                     <!-- /.modal -->
-
-
-
-
-
                                 </td>
                             </tr>
 

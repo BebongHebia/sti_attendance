@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Mail\StudentInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
@@ -86,6 +88,20 @@ class UserController extends Controller
             'email' => $request->email,
             'password' => bcrypt("12345678"),
         ]);
+
+
+        $student_data = [
+            'complete_name' => $user->complete_name,
+            'username' => $user->username,
+            'password' => '12345678',
+            'system_no' => $user->system_no,
+        ];
+
+        Mail::to($user->email)->send(new StudentInfo($student_data));
+
+
+
+
         return response()->json();
     }
 
@@ -176,4 +192,5 @@ class UserController extends Controller
         return response()->json();
 
     }
+
 }

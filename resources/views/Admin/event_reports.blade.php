@@ -96,7 +96,7 @@
                                             @if ($get_attendance == 0)
                                                 <span style="padding:10px; border-radius:10px; background-color:red; color:white">Absent</span>
                                             @else
-                                                <span style="padding:10px; border-radius:10px; background-color:green; color:white">Present</span>
+                                                 <span style="padding:10px; border-radius:10px; background-color:green; color:white">Present {{ $get_attendance_info->created_at->format('l, F d, Y, h:i:s a') }}</span><br>
                                             @endif
                                         </td>
 

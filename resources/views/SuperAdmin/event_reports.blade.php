@@ -90,14 +90,18 @@
 
                                         @php
                                             $get_attendance = App\Models\AttendanceDetail::where('attendance_id', $item_get_event_Attendance->id)->where('sys_d_id', $item_get_section_members->id)->count();
+                                            $get_attendance_info = App\Models\AttendanceDetail::where('attendance_id', $item_get_event_Attendance->id)->where('sys_d_id', $item_get_section_members->id)->latest()->first();
                                         @endphp
 
                                         <td>
                                             @if ($get_attendance == 0)
                                                 <span style="padding:10px; border-radius:10px; background-color:red; color:white">Absent</span>
                                             @else
-                                                <span style="padding:10px; border-radius:10px; background-color:green; color:white">Present</span>
+                                                <span style="padding:10px; border-radius:10px; background-color:green; color:white">Present {{ $get_attendance_info->created_at->format('l, F d, Y, h:i:s a') }}</span><br>
+
+
                                             @endif
+
                                         </td>
 
                                     @endforeach

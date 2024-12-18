@@ -32,6 +32,7 @@
             <div class="col-sm-12">
                 <table class="table table-hover table-striped table-bordered">
                     <thead>
+                        <th>No.#</th>
                         <th>Student</th>
 
                         @php
@@ -49,19 +50,25 @@
 
                         @foreach ($get_section_member as $item_get_section_member)
                             <tr>
+                                <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item_get_section_member->get_student->complete_name }}</td>
 
                                 @foreach ($get_event_attendance as $item_get_event_attendance)
 
                                     @php
                                         $get_attendance = App\Models\AttendanceDetail::where('sys_d_id', $item_get_section_member->id)->where('attendance_id', $item_get_event_attendance->id)->count();
+                                        $get_attendance_info = App\Models\AttendanceDetail::where('sys_d_id', $item_get_section_member->id)->where('attendance_id', $item_get_event_attendance->id)->latest()->first();
 
                                     @endphp
 
                                     @if ($get_attendance == 0)
                                         <td style="color:red"><b>Absent</b></td>
                                     @else
-                                        <td style="color:green"><b>Present</b></td>
+                                        <td style="color:green">
+                                            <b>Present</b>
+                                            {{ $get_attendance_info->created_at }}
+                                        </td>
+
                                     @endif
 
                                 @endforeach

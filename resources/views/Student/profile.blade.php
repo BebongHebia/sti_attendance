@@ -26,6 +26,37 @@
     <div class="container-fluid">
 
         <div class="row">
+            <div class="col-sm-2">
+                <div style="width:100%; height:100%; border:1px solid gray; border-radius:10px; margin:auto; padding:10px;">
+
+                    @php
+                        $picture_count = App\Models\UserImage::where('user_id', auth()->user()->id)->count();
+                        $picture = App\Models\UserImage::where('user_id', auth()->user()->id)->latest()->first();
+                    @endphp
+
+                    @if($picture_count > 0)
+                        <img src="{{ asset('storage/' . $picture->path) }}" class="img-fluid">
+
+                    @else
+                        <img src="{{ asset('images/profile.png') }}" class="img-fluid">
+                    @endif
+
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <form action="{{ url('/add-user-image') }}" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="user_id" value="{{ auth()->user()->id }}">
+                    <label>Select Profile</label>
+                    <input type="file" name="image" class="btn btn-outline-warning">
+                    <button class="btn btn-warning mt-2">
+                        <i class="fas fa-upload"></i> upload image
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-sm-6">
 
                 <h3 class="text-start">Profile Details</h3>
