@@ -90,14 +90,14 @@ class UserController extends Controller
         ]);
 
 
-        $student_data = [
-            'complete_name' => $user->complete_name,
-            'username' => $user->username,
-            'password' => '12345678',
-            'system_no' => $user->system_no,
-        ];
+        // $student_data = [
+        //     'complete_name' => $user->complete_name,
+        //     'username' => $user->username,
+        //     'password' => '12345678',
+        //     'system_no' => $user->system_no,
+        // ];
 
-        Mail::to($user->email)->send(new StudentInfo($student_data));
+        // Mail::to($user->email)->send(new StudentInfo($student_data));
 
 
 

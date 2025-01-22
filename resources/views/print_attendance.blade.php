@@ -66,7 +66,7 @@
                                     @else
                                         <td style="color:green">
                                             <b>Present</b>
-                                            {{ $get_attendance_info->created_at }}
+                                            {{ $get_attendance_info->created_at->format('m/d/Y h:i A') }}
                                         </td>
 
                                     @endif
